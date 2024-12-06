@@ -120,6 +120,8 @@
       outline: none;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
+      box-sizing: border-box; /* اضافه کردن این خط */
+      width: 100%; /* عرض 100% */
     }
 
     input[type="text"]:focus {
@@ -147,6 +149,7 @@
       align-items: center;
       flex-wrap: wrap; /* تنظیم برای سازگاری با موبایل */
       justify-content: space-between;
+      width: 100%;
     }
 
     .typing-indicator {
@@ -219,7 +222,7 @@
   <div class="typing-indicator" id="typingIndicator" style="display: none;">دارم فکر میکنم چی برات بنویسم👨‍💻</div>
   <div class="input-container">
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
-    <button onclick="sendMessage()">📝</button>
+    <button onclick="sendMessage()">ارسال پیام</button>
   </div>
 </div>
 
