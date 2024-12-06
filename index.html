@@ -5,25 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>چت با Ai Revolution Club</title>
   <style>
-    /* استایل‌ها بدون تغییر */
-    body {
+    @font-face {
+      font-family: 'Iranian Sans';
+      src: url('Iranian Sans.ttf') format('truetype');
+    }
+
+    body, .chat-container, .input-container, .message {
       font-family: 'Iranian Sans', sans-serif;
       direction: rtl;
       text-align: right;
-      background: linear-gradient(135deg, #0093E9, #80D0C7);
       margin: 0;
       padding: 0;
     }
 
+    body {
+      background: linear-gradient(135deg, #0093E9, #80D0C7);
+    }
+
     .support-box {
-      background-color: #ffffff;
+      background-color: #fff;
       padding: 15px;
       margin: 15px auto;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
       max-width: 90%;
-      direction: rtl;
+      text-align: center;
+    }
+
+    .support-box a {
+      color: #0093E9;
+      text-decoration: none;
     }
 
     .chat-container {
@@ -31,7 +42,7 @@
       margin: 50px auto;
       padding: 20px;
       border-radius: 15px;
-      background-color: #ffffff;
+      background-color: #fff;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       height: 80vh;
       display: flex;
@@ -40,9 +51,10 @@
       border: 2px solid #80D0C7;
     }
 
-    .chat-header {
-      text-align: center;
-      margin-bottom: 20px;
+    .chat-header h2 {
+      color: #0093E9;
+      font-size: 24px;
+      margin: 0;
     }
 
     .messages {
@@ -50,7 +62,6 @@
       overflow-y: auto;
       margin-bottom: 20px;
       padding: 15px;
-      border-radius: 10px;
       background-color: #f0f8ff;
       box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1);
     }
@@ -60,47 +71,59 @@
       padding: 12px;
       margin-bottom: 15px;
       border-radius: 12px;
-      word-wrap: break-word;
       font-size: 14px;
-      line-height: 1.6;
+      transition: all 0.3s ease-in-out;
     }
 
-    .user-message {
-      background-color: #0093E9;
-      color: white;
-      margin-left: auto;
-      text-align: left;
-    }
+    .user-message { background-color: #0093E9; color: white; text-align: left; }
+    .bot-message { background-color: #80D0C7; color: white; text-align: right; }
 
-    .bot-message {
-      background-color: #80D0C7;
-      color: white;
-      margin-right: auto;
-      text-align: right;
-    }
+    .message:hover { transform: scale(1.03); }
 
-    input[type="text"] {
+    input[type="text"], button {
       padding: 14px;
       font-size: 16px;
       border-radius: 10px;
       border: 1px solid #ccc;
       outline: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       width: 100%;
     }
 
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #0093E9;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
+    input[type="text"]:focus { border-color: #0093E9; }
+    button { background-color: #0093E9; color: white; cursor: pointer; transition: all 0.3s ease; }
+    button:hover { background-color: #007bb7; }
+
+    .input-container { display: flex; flex-direction: column; }
+
+    .typing-indicator { font-style: italic; color: #888; display: none; }
+
+    .code-container {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 8px;
+      position: relative;
+      font-size: 14px;
     }
 
-    button:hover {
-      background-color: #007bb7;
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #0093E9;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .copy-btn:hover { background-color: #007bb7; }
+
+    @media (max-width: 600px) {
+      .chat-container, .message, input[type="text"], button {
+        padding: 15px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -108,33 +131,32 @@
 
 <div class="support-box">
   <img src="https://s8.uupload.ir/files/logo_dncn.png" alt="لوگو" class="logo">
-  <p>این ربات توسط کانال‌های زیر توسعه داده شده:</p>
+  <p>🤖 <strong>این ربات توسط کانال‌های زیر توسعه داده شده:</strong><br>
+    📱 <strong>ایتا:</strong> <a href="https://eitaa.com/Ai_Revolution" target="_blank">https://eitaa.com/Ai_Revolution</a><br>
+    💬 <strong>تلگرام:</strong> <a href="https://t.me/Ai_Revolution_Club" target="_blank">https://t.me/Ai_Revolution_Club</a><br>
+    🙌 <strong>لطفا جهت حمایت، ما را به دیگران معرفی کنید.</strong> 🌟
+  </p>
 </div>
 
 <div class="chat-container">
-  <div class="chat-header">
-    <h2>چت با Ai Revolution Club</h2>
-  </div>
+  <div class="chat-header"><h2>چت با Ai Revolution Club</h2></div>
   <div class="messages" id="messages"></div>
+  <div class="typing-indicator" id="typingIndicator">دارم فکر میکنم چی برات بنویسم👨‍💻</div>
   <div class="input-container">
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
     <button onclick="sendMessage()">ارسال پیام</button>
   </div>
-  <button onclick="newConversation()" style="background-color: #f39c12;">گفتگوی جدید</button>
 </div>
 
 <script>
-  const apiKey = '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'; // کلید API شما
+  const apiKey = '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';
   const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
   function displayMessage(message, from) {
     const messageElement = document.createElement('div');
     messageElement.className = `message ${from === 'user' ? 'user-message' : 'bot-message'}`;
     messageElement.innerHTML = message.includes('```')
-      ? `<div class="code-container">
-           <button class="copy-btn" onclick="copyCode(this)">کپی کد</button>
-           <pre>${message.replace(/```/g, '')}</pre>
-         </div>`
+      ? `<div class="code-container"><button class="copy-btn" onclick="copyCode(this)">کپی کد</button><pre>${message.replace(/```/g, '')}</pre></div>`
       : message;
     document.getElementById('messages').appendChild(messageElement);
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
@@ -146,38 +168,35 @@
 
     displayMessage(userMessage, 'user');
     document.getElementById('userInput').value = '';
+    document.getElementById('typingIndicator').style.display = 'block';
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: userMessage }],
-        temperature: 0.7,
-      }),
-    });
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [{ role: 'user', content: userMessage }],
+          max_tokens: 300
+        })
+      });
 
-    if (!response.ok) {
-      console.error("خطای سرور: " + response.status);
-      return;
+      const data = await response.json();
+      const botMessage = data.choices[0].message.content.trim();
+      displayMessage(botMessage, 'bot');
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      document.getElementById('typingIndicator').style.display = 'none';
     }
-
-    const data = await response.json();
-    const botMessage = data.choices[0].message.content;
-    displayMessage(botMessage, 'bot');
   }
 
   function copyCode(button) {
-    const code = button.closest('.code-container').querySelector('pre').textContent;
-    navigator.clipboard.writeText(code);
-  }
-
-  function newConversation() {
-    document.getElementById('messages').innerHTML = '';
-    document.getElementById('userInput').value = '';
+    const codeContent = button.parentElement.querySelector('pre').textContent;
+    navigator.clipboard.writeText(codeContent).then(() => alert('کد کپی شد!'));
   }
 </script>
 
