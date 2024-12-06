@@ -26,7 +26,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
-      max-width: 90%;
+      max-width: 90%; /* تغییر به درصد برای موبایل */
       direction: rtl;
     }
 
@@ -47,7 +47,7 @@
 
     .chat-container {
       width: 100%;
-      max-width: 100%;
+      max-width: 100%; /* استفاده از 100% برای اینکه به اندازه صفحه موبایل برسد */
       margin: 50px auto;
       padding: 20px;
       border-radius: 15px;
@@ -67,7 +67,7 @@
 
     .chat-header h2 {
       color: #0093E9;
-      font-size: 24px;
+      font-size: 24px; /* تغییر اندازه فونت برای موبایل */
       margin: 0;
     }
 
@@ -87,7 +87,7 @@
       margin-bottom: 15px;
       border-radius: 12px;
       word-wrap: break-word;
-      font-size: 14px;
+      font-size: 14px; /* تغییر اندازه فونت برای موبایل */
       line-height: 1.6;
       transition: all 0.3s ease-in-out;
     }
@@ -120,6 +120,8 @@
       outline: none;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
+      box-sizing: border-box; /* اضافه کردن این خط */
+      width: 100%; /* عرض 100% */
     }
 
     input[type="text"]:focus {
@@ -145,7 +147,7 @@
     .input-container {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* تنظیم برای سازگاری با موبایل */
       justify-content: space-between;
     }
 
@@ -154,30 +156,20 @@
       color: #888;
     }
 
-    .code-container {
-      background-color: #f4f4f4;
-      padding: 15px;
+    .new-chat-btn {
       margin-top: 10px;
-      border-radius: 8px;
-      position: relative;
-      font-size: 14px;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #0093E9;
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #ff6600;
       color: white;
       border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 12px;
+      transition: all 0.3s ease;
     }
 
-    .copy-btn:hover {
-      background-color: #007bb7;
+    .new-chat-btn:hover {
+      background-color: #e65c00;
     }
 
     /* برای نمایش بهتر در موبایل */
@@ -187,10 +179,10 @@
       }
       .message {
         font-size: 14px;
-        max-width: 100%;
+        max-width: 100%; /* تغییر اندازه برای موبایل */
       }
       input[type="text"], button {
-        width: 100%;
+        width: 100%; /* عرض کامل در موبایل */
         margin: 5px 0;
       }
       .input-container {
@@ -221,43 +213,67 @@
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
     <button onclick="sendMessage()">ارسال پیام</button>
   </div>
-  <button onclick="startNewConversation()">گفتگوی جدید</button>
+  <button class="new-chat-btn" onclick="startNewChat()">گفتگوی جدید</button>
 </div>
 
 <script>
-  function sendMessage() {
-    var userInput = document.getElementById('userInput').value;
-    if (userInput.trim() === '') return;
+  const apiKey = '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'; // کلید API شما
+  const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
-    var messagesContainer = document.getElementById('messages');
-    var messageElement = document.createElement('div');
-    messageElement.classList.add('user-message');
-    messageElement.textContent = userInput;
-    messagesContainer.appendChild(messageElement);
+  function displayMessage(message, from) {
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${from === 'user' ? 'user-message' : 'bot-message'}`;
+    messageElement.innerHTML = message.includes('```')
+      ? `<div class="code-container">
+           <button class="copy-btn" onclick="copyCode(this)">کپی کد</button>
+           <pre>${message.replace(/```/g, '')}</pre>
+         </div>`
+      : message;
+    document.getElementById('messages').appendChild(messageElement);
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+  }
 
+  async function sendMessage() {
+    const userMessage = document.getElementById('userInput').value.trim();
+    if (!userMessage) return;
+
+    displayMessage(userMessage, 'user');
     document.getElementById('userInput').value = '';
-    simulateBotReply(userInput);
+    document.getElementById('typingIndicator').style.display = 'block';
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [{ role: 'user', content: userMessage }],
+          max_tokens: 150
+        })
+      });
+      const data = await response.json();
+      const botMessage = data.choices[0].message.content;
+      displayMessage(botMessage, 'bot');
+    } catch (error) {
+      displayMessage("خطا در ارتباط با سرور. لطفا دوباره تلاش کنید.", 'bot');
+    } finally {
+      document.getElementById('typingIndicator').style.display = 'none';
+    }
   }
 
-  function simulateBotReply(userInput) {
-    setTimeout(function() {
-      var botMessage = "پاسخ به: " + userInput;
-      var messagesContainer = document.getElementById('messages');
-      var messageElement = document.createElement('div');
-      messageElement.classList.add('bot-message');
-      messageElement.textContent = botMessage;
-      messagesContainer.appendChild(messageElement);
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }, 1000);
-  }
-
-  function startNewConversation() {
-    // پاک کردن پیام‌ها
+  function startNewChat() {
     document.getElementById('messages').innerHTML = '';
-    // پاک کردن تکست باکس
     document.getElementById('userInput').value = '';
-    // بازنشانی تایپینگ ایندیکاتور
-    document.getElementById('typingIndicator').style.display = 'none';
+  }
+
+  function copyCode(button) {
+    const codeText = button.previousElementSibling.innerText;
+    navigator.clipboard.writeText(codeText).then(() => {
+      alert('کد کپی شد!');
+    });
   }
 </script>
 
