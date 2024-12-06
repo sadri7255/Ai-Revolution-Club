@@ -156,20 +156,30 @@
       color: #888;
     }
 
-    .new-chat-btn {
+    .code-container {
+      background-color: #f4f4f4;
+      padding: 15px;
       margin-top: 10px;
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #ff6600;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      border-radius: 8px;
+      position: relative;
+      font-size: 14px;
     }
 
-    .new-chat-btn:hover {
-      background-color: #e65c00;
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #0093E9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .copy-btn:hover {
+      background-color: #007bb7;
     }
 
     /* برای نمایش بهتر در موبایل */
@@ -213,7 +223,7 @@
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
     <button onclick="sendMessage()">ارسال پیام</button>
   </div>
-  <button class="new-chat-btn" onclick="startNewChat()">گفتگوی جدید</button>
+  <button onclick="newConversation()" style="background-color: #f39c12; margin-top: 10px;">گفتگوی جدید</button>
 </div>
 
 <script>
@@ -241,39 +251,34 @@
     document.getElementById('userInput').value = '';
     document.getElementById('typingIndicator').style.display = 'block';
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: userMessage }],
-          max_tokens: 150
-        })
-      });
-      const data = await response.json();
-      const botMessage = data.choices[0].message.content;
-      displayMessage(botMessage, 'bot');
-    } catch (error) {
-      displayMessage("خطا در ارتباط با سرور. لطفا دوباره تلاش کنید.", 'bot');
-    } finally {
-      document.getElementById('typingIndicator').style.display = 'none';
-    }
-  }
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: userMessage }],
+        temperature: 0.7,
+      }),
+    });
 
-  function startNewChat() {
-    document.getElementById('messages').innerHTML = '';
-    document.getElementById('userInput').value = '';
+    const data = await response.json();
+    const botMessage = data.choices[0].message.content;
+
+    document.getElementById('typingIndicator').style.display = 'none';
+    displayMessage(botMessage, 'bot');
   }
 
   function copyCode(button) {
-    const codeText = button.previousElementSibling.innerText;
-    navigator.clipboard.writeText(codeText).then(() => {
-      alert('کد کپی شد!');
-    });
+    const code = button.closest('.code-container').querySelector('pre').textContent;
+    navigator.clipboard.writeText(code);
+  }
+
+  function newConversation() {
+    document.getElementById('messages').innerHTML = '';
+    document.getElementById('userInput').value = '';
   }
 </script>
 
