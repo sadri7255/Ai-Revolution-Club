@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>چت با Ai Revolution Club</title>
   <style>
-    @font-face {
-      font-family: 'Iranian Sans';
-      src: url('Iranian Sans.ttf') format('truetype');
-    }
-
+    /* استایل‌ها بدون تغییر */
     body {
       font-family: 'Iranian Sans', sans-serif;
       direction: rtl;
@@ -26,28 +22,12 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
-      max-width: 90%; /* تغییر به درصد برای موبایل */
+      max-width: 90%;
       direction: rtl;
-    }
-
-    .support-box .logo {
-      width: 90px;
-      height: 90px;
-      margin-bottom: 2px;
-    }
-
-    .support-box a {
-      color: #0093E9;
-      text-decoration: none;
-    }
-
-    .support-box a:hover {
-      text-decoration: underline;
     }
 
     .chat-container {
       width: 100%;
-      max-width: 100%; /* استفاده از 100% برای اینکه به اندازه صفحه موبایل برسد */
       margin: 50px auto;
       padding: 20px;
       border-radius: 15px;
@@ -63,12 +43,6 @@
     .chat-header {
       text-align: center;
       margin-bottom: 20px;
-    }
-
-    .chat-header h2 {
-      color: #0093E9;
-      font-size: 24px; /* تغییر اندازه فونت برای موبایل */
-      margin: 0;
     }
 
     .messages {
@@ -87,9 +61,8 @@
       margin-bottom: 15px;
       border-radius: 12px;
       word-wrap: break-word;
-      font-size: 14px; /* تغییر اندازه فونت برای موبایل */
+      font-size: 14px;
       line-height: 1.6;
-      transition: all 0.3s ease-in-out;
     }
 
     .user-message {
@@ -106,26 +79,13 @@
       text-align: right;
     }
 
-    .message:hover {
-      transform: scale(1.03);
-    }
-
     input[type="text"] {
-      font-family: 'Iranian Sans', sans-serif;
-      flex: 1;
       padding: 14px;
       font-size: 16px;
       border-radius: 10px;
       border: 1px solid #ccc;
       outline: none;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      box-sizing: border-box; /* اضافه کردن این خط */
-      width: 100%; /* عرض 100% */
-    }
-
-    input[type="text"]:focus {
-      border-color: #0093E9;
+      width: 100%;
     }
 
     button {
@@ -136,68 +96,11 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-right: 10px;
+      margin-top: 10px;
     }
 
     button:hover {
       background-color: #007bb7;
-    }
-
-    .input-container {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap; /* تنظیم برای سازگاری با موبایل */
-      justify-content: space-between;
-    }
-
-    .typing-indicator {
-      font-style: italic;
-      color: #888;
-    }
-
-    .code-container {
-      background-color: #f4f4f4;
-      padding: 15px;
-      margin-top: 10px;
-      border-radius: 8px;
-      position: relative;
-      font-size: 14px;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #0093E9;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .copy-btn:hover {
-      background-color: #007bb7;
-    }
-
-    /* برای نمایش بهتر در موبایل */
-    @media (max-width: 600px) {
-      .chat-container {
-        padding: 15px;
-      }
-      .message {
-        font-size: 14px;
-        max-width: 100%; /* تغییر اندازه برای موبایل */
-      }
-      input[type="text"], button {
-        width: 100%; /* عرض کامل در موبایل */
-        margin: 5px 0;
-      }
-      .input-container {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
@@ -205,12 +108,7 @@
 
 <div class="support-box">
   <img src="https://s8.uupload.ir/files/logo_dncn.png" alt="لوگو" class="logo">
-  <p>
-    🤖 <strong>این ربات توسط کانال‌های زیر توسعه داده شده:</strong> <br>
-    📱 <strong>ایتا:</strong> <a href="https://eitaa.com/Ai_Revolution" target="_blank">https://eitaa.com/Ai_Revolution</a> <br>
-    💬 <strong>تلگرام:</strong> <a href="https://t.me/Ai_Revolution_Club" target="_blank">https://t.me/Ai_Revolution_Club</a> <br>
-    🙌 <strong>لطفا جهت حمایت، ما را به دیگران معرفی کنید.</strong> 🌟
-  </p>
+  <p>این ربات توسط کانال‌های زیر توسعه داده شده:</p>
 </div>
 
 <div class="chat-container">
@@ -218,12 +116,11 @@
     <h2>چت با Ai Revolution Club</h2>
   </div>
   <div class="messages" id="messages"></div>
-  <div class="typing-indicator" id="typingIndicator" style="display: none;">دارم فکر میکنم چی برات بنویسم👨‍💻</div>
   <div class="input-container">
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
     <button onclick="sendMessage()">ارسال پیام</button>
   </div>
-  <button onclick="newConversation()" style="background-color: #f39c12; margin-top: 10px;">گفتگوی جدید</button>
+  <button onclick="newConversation()" style="background-color: #f39c12;">گفتگوی جدید</button>
 </div>
 
 <script>
@@ -249,7 +146,6 @@
 
     displayMessage(userMessage, 'user');
     document.getElementById('userInput').value = '';
-    document.getElementById('typingIndicator').style.display = 'block';
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -264,10 +160,13 @@
       }),
     });
 
+    if (!response.ok) {
+      console.error("خطای سرور: " + response.status);
+      return;
+    }
+
     const data = await response.json();
     const botMessage = data.choices[0].message.content;
-
-    document.getElementById('typingIndicator').style.display = 'none';
     displayMessage(botMessage, 'bot');
   }
 
