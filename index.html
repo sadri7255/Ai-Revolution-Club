@@ -199,6 +199,32 @@
       .input-container {
         flex-direction: column;
       }
+
+      button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #0093E9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #007bb7;
+}
+
+/* دکمه گفتگوی جدید با رنگ متفاوت */
+button:nth-child(3) {
+  background-color: #80D0C7;
+}
+
+button:nth-child(3):hover {
+  background-color: #66b3a3;
+}
+
     }
   </style>
 </head>
@@ -223,6 +249,8 @@
   <div class="input-container">
     <input type="text" id="userInput" placeholder="پیام خود را وارد کنید..." onkeydown="if(event.key === 'Enter') sendMessage()">
     <button onclick="sendMessage()">ارسال پیام</button>
+    <button onclick="startNewConversation()">گفتگوی جدید</button> <!-- دکمه گفتگوی جدید -->
+
   </div>
 </div>
 
@@ -273,6 +301,15 @@
     } finally {
       document.getElementById('typingIndicator').style.display = 'none';
     }
+    function startNewConversation() {
+  // پاک کردن پیام‌ها
+  document.getElementById('messages').innerHTML = '';
+  // پاک کردن تکست باکس
+  document.getElementById('userInput').value = '';
+  // بازنشانی تایپینگ ایندیکاتور
+  document.getElementById('typingIndicator').style.display = 'none';
+}
+
   }
 
   function copyCode(button) {
