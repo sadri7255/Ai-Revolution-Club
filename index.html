@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-
-
-<div class="support-box">
-  <img src="https://s8.uupload.ir/files/logo_dncn.png" alt="لوگو" class="logo">
-  <p>
-    🤖 <strong>این ربات توسط کانال‌های زیر توسعه داده شده:</strong> <br>
-    📱 <strong>ایتا:</strong> <a href="https://eitaa.com/Ai_Revolution" target="_blank">https://eitaa.com/Ai_Revolution</a> <br>
-    💬 <strong>تلگرام:</strong> <a href="https://t.me/Ai_Revolution_Club" target="_blank">https://t.me/Ai_Revolution_Club</a> <br>
-    🙌 <strong>لطفا جهت حمایت، ما را به دیگران معرفی کنید.</strong> 🌟
-  </p>
-</div>
-
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>چت با Ai Revolution Club</title>
@@ -32,34 +19,35 @@
       padding: 0;
     }
 
-.support-box {
-  background-color: #ffffff;
-  padding: 15px;
-  margin: 15px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 500px;
-  direction: rtl;
-}
+    .support-box {
+      background-color: #ffffff;
+      padding: 15px;
+      margin: 15px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%; /* تغییر به درصد برای موبایل */
+      direction: rtl;
+    }
 
-.support-box .logo {
-  width: 90px;
-  height: 90px;
-  margin-bottom: 2px;
-}
-.support-box a {
-  color: #0093E9;
-  text-decoration: none;
-}
-.support-box a:hover {
-  text-decoration: underline;
-}
+    .support-box .logo {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 2px;
+    }
 
+    .support-box a {
+      color: #0093E9;
+      text-decoration: none;
+    }
+
+    .support-box a:hover {
+      text-decoration: underline;
+    }
 
     .chat-container {
       width: 100%;
-      max-width: 800px;
+      max-width: 100%; /* استفاده از 100% برای اینکه به اندازه صفحه موبایل برسد */
       margin: 50px auto;
       padding: 20px;
       border-radius: 15px;
@@ -79,7 +67,7 @@
 
     .chat-header h2 {
       color: #0093E9;
-      font-size: 28px;
+      font-size: 24px; /* تغییر اندازه فونت برای موبایل */
       margin: 0;
     }
 
@@ -99,7 +87,7 @@
       margin-bottom: 15px;
       border-radius: 12px;
       word-wrap: break-word;
-      font-size: 16px;
+      font-size: 14px; /* تغییر اندازه فونت برای موبایل */
       line-height: 1.6;
       transition: all 0.3s ease-in-out;
     }
@@ -123,7 +111,7 @@
     }
 
     input[type="text"] {
-	    font-family: 'Iranian Sans', sans-serif;  /* اضافه کردن فونت Iranian Sans */
+      font-family: 'Iranian Sans', sans-serif;
       flex: 1;
       padding: 14px;
       font-size: 16px;
@@ -157,6 +145,8 @@
     .input-container {
       display: flex;
       align-items: center;
+      flex-wrap: wrap; /* تنظیم برای سازگاری با موبایل */
+      justify-content: space-between;
     }
 
     .typing-indicator {
@@ -189,9 +179,37 @@
     .copy-btn:hover {
       background-color: #007bb7;
     }
+
+    /* برای نمایش بهتر در موبایل */
+    @media (max-width: 600px) {
+      .chat-container {
+        padding: 15px;
+      }
+      .message {
+        font-size: 14px;
+        max-width: 100%; /* تغییر اندازه برای موبایل */
+      }
+      input[type="text"], button {
+        width: 100%; /* عرض کامل در موبایل */
+        margin: 5px 0;
+      }
+      .input-container {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
+
+<div class="support-box">
+  <img src="https://s8.uupload.ir/files/logo_dncn.png" alt="لوگو" class="logo">
+  <p>
+    🤖 <strong>این ربات توسط کانال‌های زیر توسعه داده شده:</strong> <br>
+    📱 <strong>ایتا:</strong> <a href="https://eitaa.com/Ai_Revolution" target="_blank">https://eitaa.com/Ai_Revolution</a> <br>
+    💬 <strong>تلگرام:</strong> <a href="https://t.me/Ai_Revolution_Club" target="_blank">https://t.me/Ai_Revolution_Club</a> <br>
+    🙌 <strong>لطفا جهت حمایت، ما را به دیگران معرفی کنید.</strong> 🌟
+  </p>
+</div>
 
 <div class="chat-container">
   <div class="chat-header">
@@ -230,26 +248,35 @@
     document.getElementById('userInput').value = '';
     document.getElementById('typingIndicator').style.display = 'block';
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'amazon/nova-pro-v1',
-        messages: [{ role: 'user', content: [{ type: 'text', text: userMessage }] }]
-      })
-    });
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [{ role: 'user', content: userMessage }],
+          max_tokens: 300
+        })
+      });
 
-    const data = await response.json();
-    displayMessage(data.choices[0].message.content, 'bot');
-    document.getElementById('typingIndicator').style.display = 'none';
+      const data = await response.json();
+      const botMessage = data.choices[0].message.content.trim();
+      displayMessage(botMessage, 'bot');
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      document.getElementById('typingIndicator').style.display = 'none';
+    }
   }
 
   function copyCode(button) {
-    navigator.clipboard.writeText(button.parentElement.querySelector('pre').innerText)
-      .then(() => alert('کد کپی شد!'));
+    const codeContent = button.parentElement.querySelector('pre').textContent;
+    navigator.clipboard.writeText(codeContent).then(() => {
+      alert('کد کپی شد!');
+    });
   }
 </script>
 
