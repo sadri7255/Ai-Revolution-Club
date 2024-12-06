@@ -21,18 +21,19 @@
 
     .support-box {
       background-color: #ffffff;
-      padding: 20px;
-      margin: 20px auto;
+      padding: 15px;
+      margin: 15px auto;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
-      max-width: 90%;
+      max-width: 90%; /* تغییر به درصد برای موبایل */
+      direction: rtl;
     }
 
     .support-box .logo {
       width: 90px;
       height: 90px;
-      margin-bottom: 10px;
+      margin-bottom: 2px;
     }
 
     .support-box a {
@@ -46,9 +47,9 @@
 
     .chat-container {
       width: 100%;
-      max-width: 700px;
+      max-width: 100%; /* استفاده از 100% برای اینکه به اندازه صفحه موبایل برسد */
       margin: 50px auto;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
       background-color: #ffffff;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -61,12 +62,12 @@
 
     .chat-header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .chat-header h2 {
       color: #0093E9;
-      font-size: 24px;
+      font-size: 24px; /* تغییر اندازه فونت برای موبایل */
       margin: 0;
     }
 
@@ -86,7 +87,7 @@
       margin-bottom: 15px;
       border-radius: 12px;
       word-wrap: break-word;
-      font-size: 14px;
+      font-size: 14px; /* تغییر اندازه فونت برای موبایل */
       line-height: 1.6;
       transition: all 0.3s ease-in-out;
     }
@@ -144,8 +145,8 @@
     .input-container {
       display: flex;
       align-items: center;
+      flex-wrap: wrap; /* تنظیم برای سازگاری با موبایل */
       justify-content: space-between;
-      gap: 10px;
     }
 
     .typing-indicator {
@@ -186,18 +187,14 @@
       }
       .message {
         font-size: 14px;
-        max-width: 100%;
+        max-width: 100%; /* تغییر اندازه برای موبایل */
       }
       input[type="text"], button {
-        width: 100%;
+        width: 100%; /* عرض کامل در موبایل */
         margin: 5px 0;
       }
       .input-container {
         flex-direction: column;
-        gap: 10px;
-      }
-      .chat-header h2 {
-        font-size: 20px;
       }
     }
   </style>
@@ -256,28 +253,28 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'openai-llama-7b-v1.0', // مدل گفتمان
+          model: 'gpt-4',
           messages: [{ role: 'user', content: userMessage }],
-        }),
+          max_tokens: 300
+        })
       });
 
       const data = await response.json();
-      const botMessage = data.choices[0].message.content;
-
+      const botMessage = data.choices[0].message.content.trim();
       displayMessage(botMessage, 'bot');
     } catch (error) {
-      displayMessage("خطا در ارسال پیام. لطفاً دوباره تلاش کنید.", 'bot');
+      console.error('Error:', error);
+    } finally {
+      document.getElementById('typingIndicator').style.display = 'none';
     }
-
-    document.getElementById('typingIndicator').style.display = 'none';
   }
 
   function copyCode(button) {
-    const codeText = button.parentElement.querySelector('pre').textContent;
-    navigator.clipboard.writeText(codeText).then(() => {
+    const codeContent = button.parentElement.querySelector('pre').textContent;
+    navigator.clipboard.writeText(codeContent).then(() => {
       alert('کد کپی شد!');
     });
   }
